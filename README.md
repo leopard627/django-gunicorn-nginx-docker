@@ -1,4 +1,4 @@
-# django-gunicorn-nginx-docker
+# django-gunicorn-nginx-docker(지-유니콘 엔진엑스 예시)
 https://medium.com/@elastic7327/python%EA%B0%9C%EB%B0%9C%EC%9E%90-uwsgi%EB%A5%BC-%EB%B2%84%EB%A6%AC%EA%B3%A0-gunicorn%EC%9C%BC%EB%A1%9C-%EA%B0%88%EC%95%84%ED%83%80%EB%8B%A4-df1c95f220c5
 
 ## 도커 빌드 하는방법 Example
