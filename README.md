@@ -3,7 +3,7 @@ https://medium.com/@elastic7327/python%EA%B0%9C%EB%B0%9C%EC%9E%90-uwsgi%EB%A5%BC
 
 ## 도커 빌드 하는방법 Example
 ```
-docker build -t django_gunicorn:0.0.1
+docker build -t django_gunicorn:0.0.1 .
 ```
 
 ## 빌드한 도커 이미지를 실행하는 방법  Example
