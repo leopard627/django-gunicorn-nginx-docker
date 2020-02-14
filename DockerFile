@@ -31,9 +31,7 @@ ADD . /project/
 
 ARG SERVICE_ARG=development
 ENV DJANGO_SETTINGS_MODULE=django_gunicorn.settings.$SERVICE_ARG
-ARG WORKERS=5
 ENV SERVICE_ENV=$SERVICE_ARG
-ENV WORKER_NO=$WORKERS
 
 # setup all the configfiles
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
