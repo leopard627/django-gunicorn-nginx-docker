@@ -1,0 +1,13 @@
+version: "3.3"
+services:
+  api:
+    image: django-nginx-gunicorn-xyz
+    container_name: django-nginx-gunicorn 
+    build: .
+    restart: always
+    environment:
+      SERVICE_ARG: "development"
+
+    ports:
+     - 80:80
+     - 443:443
