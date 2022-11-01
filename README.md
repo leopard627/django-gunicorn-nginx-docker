@@ -6,6 +6,8 @@ https://medium.com/@elastic7327/python%EA%B0%9C%EB%B0%9C%EC%9E%90-uwsgi%EB%A5%BC
 
 ## 도커 컴포즈로 실행 Example
 ```
+# localhost (:80 port)으로 확인 하실 수 있습니다.
+
 docker-compose up --build
 ```
 
@@ -16,7 +18,7 @@ docker build -t django_gunicorn:0.0.1 .
 
 ## 빌드한 도커 이미지를 실행하는 방법  Example
 ```
-# localhost:8080으로 확인 하실 수 있습니다.
+# localhost:8080 으로 확인 하실 수 있습니다.
 docker run -it -d --rm -p 8080:80 django_gunicorn:0.0.1
 ```
 
