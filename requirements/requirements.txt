@@ -13,6 +13,6 @@ pyparsing==2.4.0
 pytest==4.6.3
 pytz==2019.1
 six==1.12.0
-sqlparse==0.3.0
+sqlparse==0.4.4
 wcwidth==0.1.7
 zipp==0.5.1
