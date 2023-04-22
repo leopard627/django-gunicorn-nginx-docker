@@ -4,6 +4,14 @@
 # django-gunicorn-nginx-docker(지-유니콘 엔진엑스 예시)
 https://medium.com/@elastic7327/python%EA%B0%9C%EB%B0%9C%EC%9E%90-uwsgi%EB%A5%BC-%EB%B2%84%EB%A6%AC%EA%B3%A0-gunicorn%EC%9C%BC%EB%A1%9C-%EA%B0%88%EC%95%84%ED%83%80%EB%8B%A4-df1c95f220c5
 
+
+## 개발환경 실행
+```
+cd django_gunicorn
+
+python3 manage.py runserver --settings=django_gunicorn.settings.development
+```
+
 ## 도커 컴포즈로 실행 Example
 ```
 # localhost (:80 port)으로 확인 하실 수 있습니다.
@@ -21,7 +29,6 @@ docker build -t django_gunicorn:0.0.1 .
 # localhost:8080 으로 확인 하실 수 있습니다.
 docker run -it -d --rm -p 8080:80 django_gunicorn:0.0.1
 ```
-
 
 ### 정상적으로 컨테이너가 실행되었다면 localhost:8080에 아래와 같은 화면이 나올 것입니다.
 
