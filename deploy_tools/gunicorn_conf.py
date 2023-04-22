@@ -1,15 +1,19 @@
 import multiprocessing
+from deploy_tools.workers import CustomUvicornWorker
 
-name = 'django_gunicorn'
-bind = 'unix:/project/django_gunicorn.sock'
+name = "django_gunicorn"
+bind = "unix:/project/django_gunicorn.sock"
 workers = multiprocessing.cpu_count() * 2 + 1
-keepalive = 32
+keepalive = 62
 worker_connections = 1000 * workers
-worker_class = "gevent"
+worker_class = "deploy_tools.workers.CustomUvicornWorker"  # 이부분 custom 해야함
 reload = True
-loglevel = 'info'
-logfile = '-'
+loglevel = "INFO"
+logfile = "-"
 spew = False
+lifespan = "off"
+
+capture_output = True
 
 max_requests = 1000
 max_requests_jitter = 50
