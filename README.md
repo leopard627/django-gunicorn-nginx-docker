@@ -1,9 +1,9 @@
-# django-gunicorn-nginx-docker
+# django-gunicorn-docker
 
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Felastic7327%2Fdjango-gunicorn-nginx-docker&count_bg=%2379C83D&title_bg=%23555555&title=Visitors&edge_flat=false)](https://hits.seeyoufarm.com)
 
-Production-ready Django deployment with Gunicorn, Uvicorn workers, and Nginx in Docker.
+Production-ready Django deployment with Gunicorn and high-performance Uvicorn workers in Docker.
 
 ## Tech Stack
 
@@ -11,18 +11,18 @@ Production-ready Django deployment with Gunicorn, Uvicorn workers, and Nginx in 
 - **Django**: 5.2.8 (LTS)
 - **Gunicorn**: 23.0.0
 - **Uvicorn**: 0.38.0 (ASGI worker with uvloop and httptools)
-- **Nginx**: 1.22.1
 - **Supervisor**: 4.3.0
 
 ## Features
 
 - ASGI/WSGI compatible Django application
-- High-performance Uvicorn workers with uvloop
-- Nginx reverse proxy
+- High-performance Uvicorn workers with uvloop and httptools
+- Gunicorn as HTTP server
 - Supervisor for process management
 - Docker Compose for easy deployment
 - Development and production settings separation
 - Security headers configured
+- Lightweight architecture without nginx overhead
 
 ## Quick Start
 
@@ -39,8 +39,8 @@ python3 manage.py runserver --settings=django_gunicorn.settings.development
 # Build and start containers
 docker-compose up --build
 
-# Access the application at http://localhost
-# Admin interface at http://localhost/admin
+# Access the application at http://localhost:8000
+# Admin interface at http://localhost:8000/admin
 ```
 
 ### Stop Containers
@@ -54,16 +54,16 @@ docker-compose down
 ### Build the Image
 
 ```bash
-docker build -t django-gunicorn-nginx:latest .
+docker build -t django-gunicorn:latest .
 ```
 
 ### Run the Container
 
 ```bash
-# Run on port 8080
-docker run -it -d --rm -p 8080:80 django-gunicorn-nginx:latest
+# Run on port 8000
+docker run -it -d --rm -p 8000:8000 django-gunicorn:latest
 
-# Access at http://localhost:8080
+# Access at http://localhost:8000
 ```
 
 ## Configuration
@@ -78,26 +78,19 @@ The application supports different environment configurations:
 Set the environment using the `SERVICE_ARG` build argument:
 
 ```bash
-docker build --build-arg SERVICE_ARG=product -t django-gunicorn-nginx:prod .
+docker build --build-arg SERVICE_ARG=product -t django-gunicorn:prod .
 ```
 
 ### Gunicorn Configuration
 
 Located at `deploy_tools/gunicorn_conf.py`:
 
-- Worker class: Custom Uvicorn worker with uvloop
+- Bind address: `0.0.0.0:8000`
+- Worker class: Custom Uvicorn worker with uvloop and httptools
 - Workers: `(CPU cores * 2) + 1`
 - Max requests: 1000 (with jitter)
 - Timeout: 15 seconds
-
-### Nginx Configuration
-
-Located at `deploy_tools/nginx.conf`:
-
-- Reverse proxy to Gunicorn Unix socket
-- Static files serving
-- Media files serving
-- Client max body size: 512MB
+- Keepalive: 62 seconds
 
 ## Project Structure
 

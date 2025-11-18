@@ -1,12 +1,11 @@
 services:
   api:
-    image: django-nginx-gunicorn-xyz
-    container_name: django-nginx-gunicorn 
+    image: django-gunicorn-xyz
+    container_name: django-gunicorn
     build: .
     restart: always
     environment:
       SERVICE_ARG: "development"
 
     ports:
-     - 80:80
-     - 443:443
+     - 8000:8000
