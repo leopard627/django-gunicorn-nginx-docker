@@ -1,34 +1,151 @@
-# django-gunicorn-nginx-docker Example
+# django-gunicorn-nginx-docker
+
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Felastic7327%2Fdjango-gunicorn-nginx-docker&count_bg=%2379C83D&title_bg=%23555555&title=Visitors&edge_flat=false)](https://hits.seeyoufarm.com)
 
-https://medium.com/@elastic7327/python%EA%B0%9C%EB%B0%9C%EC%9E%90-uwsgi%EB%A5%BC-%EB%B2%84%EB%A6%AC%EA%B3%A0-gunicorn%EC%9C%BC%EB%A1%9C-%EA%B0%88%EC%95%84%ED%83%80%EB%8B%A4-df1c95f220c5
+Production-ready Django deployment with Gunicorn, Uvicorn workers, and Nginx in Docker.
 
-## Running the Development Environment
-```
+## Tech Stack
+
+- **Python**: 3.13
+- **Django**: 5.2.8 (LTS)
+- **Gunicorn**: 23.0.0
+- **Uvicorn**: 0.38.0 (ASGI worker with uvloop and httptools)
+- **Nginx**: 1.22.1
+- **Supervisor**: 4.3.0
+
+## Features
+
+- ASGI/WSGI compatible Django application
+- High-performance Uvicorn workers with uvloop
+- Nginx reverse proxy
+- Supervisor for process management
+- Docker Compose for easy deployment
+- Development and production settings separation
+- Security headers configured
+
+## Quick Start
+
+### Development Environment
+
+```bash
 cd django_gunicorn
-
 python3 manage.py runserver --settings=django_gunicorn.settings.development
 ```
 
-## Running with Docker Compose Example
-```
-# Access via localhost (:80 port).
+### Docker Compose (Recommended)
 
+```bash
+# Build and start containers
 docker-compose up --build
+
+# Access the application at http://localhost
+# Admin interface at http://localhost/admin
 ```
 
-## Building the Docker Image Example
-```
-docker build -t django_gunicorn:0.0.1 .
+### Stop Containers
+
+```bash
+docker-compose down
 ```
 
-## Running the Built Docker Image Example
-```
-# Access via localhost:8080.
-docker run -it -d --rm -p 8080:80 django_gunicorn:0.0.1
+## Manual Docker Build
+
+### Build the Image
+
+```bash
+docker build -t django-gunicorn-nginx:latest .
 ```
 
-### If the container is running correctly, you will see the following screen at localhost:8080.
+### Run the Container
 
-<img width="1285" alt="스크린샷 2019-06-17 오전 12 46 27" src="https://user-images.githubusercontent.com/16227780/59566313-62977580-9099-11e9-9151-9ee1f98da2de.png">
+```bash
+# Run on port 8080
+docker run -it -d --rm -p 8080:80 django-gunicorn-nginx:latest
+
+# Access at http://localhost:8080
+```
+
+## Configuration
+
+### Environment Settings
+
+The application supports different environment configurations:
+
+- **Development**: `django_gunicorn.settings.development`
+- **Production**: `django_gunicorn.settings.product`
+
+Set the environment using the `SERVICE_ARG` build argument:
+
+```bash
+docker build --build-arg SERVICE_ARG=product -t django-gunicorn-nginx:prod .
+```
+
+### Gunicorn Configuration
+
+Located at `deploy_tools/gunicorn_conf.py`:
+
+- Worker class: Custom Uvicorn worker with uvloop
+- Workers: `(CPU cores * 2) + 1`
+- Max requests: 1000 (with jitter)
+- Timeout: 15 seconds
+
+### Nginx Configuration
+
+Located at `deploy_tools/nginx.conf`:
+
+- Reverse proxy to Gunicorn Unix socket
+- Static files serving
+- Media files serving
+- Client max body size: 512MB
+
+## Project Structure
+
+```
+.
+├── django_gunicorn/
+│   ├── django_gunicorn/
+│   │   ├── settings/
+│   │   │   ├── settings_base.py
+│   │   │   ├── development.py
+│   │   │   └── product.py
+│   │   ├── urls.py
+│   │   ├── asgi.py
+│   │   └── wsgi.py
+│   ├── sample_app/
+│   └── manage.py
+├── deploy_tools/
+│   ├── gunicorn_conf.py
+│   ├── workers.py
+│   ├── nginx.conf
+│   └── supervisor.conf
+├── requirements/
+│   └── requirements.txt
+├── Dockerfile
+└── docker-compose.yaml
+```
+
+## Production Deployment
+
+The production settings include:
+
+- `DEBUG = False`
+- Security middleware enabled
+- Proper logging configuration
+- Static and media files configuration
+
+Make sure to:
+
+1. Set `SECRET_KEY` via environment variable
+2. Configure `ALLOWED_HOSTS` properly
+3. Enable HTTPS settings if using SSL
+4. Run migrations: `python manage.py migrate`
+5. Collect static files: `python manage.py collectstatic`
+
+## Reference
+
+[Medium Article (Korean)](https://medium.com/@elastic7327/python%EA%B0%9C%EB%B0%9C%EC%9E%90-uwsgi%EB%A5%BC-%EB%B2%84%EB%A6%AC%EA%B3%A0-gunicorn%EC%9C%BC%EB%A1%9C-%EA%B0%88%EC%95%84%ED%83%80%EB%8B%A4-df1c95f220c5)
+
+## License
+
+This project is open source and available for educational purposes.
